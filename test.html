@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Psyche Index — Personality Assessment</title>
+<meta name="description" content="The Psyche Index is a comprehensive personality assessment combining Jungian cognitive functions, Big Five (NEO), and the Enneagram." />
+<meta name="robots" content="index,follow" />
+<meta property="og:title" content="The Psyche Index — Personality Assessment" />
+<meta property="og:description" content="A comprehensive personality assessment combining Jungian cognitive functions, Big Five (NEO), and the Enneagram." />
+<meta property="og:type" content="website" />
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0f0b;
+    --parchment: #e8d5b0;
+    --parchment-dark: #d4be96;
+    --parchment-light: #f2e8cc;
+    --forest: #1a2a1a;
+    --forest-mid: #2d4a2d;
+    --rust: #8b3a2a;
+    --gold: #c9a84c;
+    --faded: #6b5a3e;
+    --pale: #f7f0e0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--ink);
+    color: var(--ink);
+    font-family: 'Courier Prime', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── COVER ── */
+  #cover {
+    background-color: var(--forest);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    position: relative;
+    border-bottom: 6px double var(--gold);
+  }
+
+  #cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(201,168,76,0.06) 28px, rgba(201,168,76,0.06) 29px),
+      repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(201,168,76,0.04) 28px, rgba(201,168,76,0.04) 29px);
+    pointer-events: none;
+  }
+
+  .cover-stamp {
+    border: 3px solid var(--gold);
+    border-top: 6px solid var(--gold);
+    border-bottom: 6px solid var(--gold);
+    padding: 0.4rem 2.5rem;
+    font-family: 'Special Elite', cursive;
+    color: var(--gold);
+    letter-spacing: 0.35em;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-institute {
+    font-family: 'Special Elite', cursive;
+    color: var(--parchment-dark);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-title {
+    font-family: 'IM Fell English', serif;
+    color: var(--parchment);
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+    text-shadow: 2px 3px 0px rgba(0,0,0,0.5);
+  }
+
+  .cover-subtitle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    text-align: center;
+    margin-bottom: 3.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .inkblot-svg {
+    width: 140px;
+    height: 100px;
+    margin-bottom: 3rem;
+    opacity: 0.75;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-divider {
+    width: 320px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-meta {
+    font-family: 'Special Elite', cursive;
+    color: var(--faded);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-align: center;
+    line-height: 2;
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+  }
+
+  .cover-meta em {
+    color: var(--parchment-dark);
+    font-style: normal;
+  }
+
+  #begin-btn {
+    margin-top: 3rem;
+    background: none;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Special Elite', cursive;
+    letter-spacing: 0.3em;
+    font-size: 0.75rem;
+    padding: 1rem 3rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+
+  #begin-btn:hover {
+    background: var(--gold);
+    color: var(--forest);
+  }
+
+  /* ── APP WRAPPER ── */
+  #app {
+    display: none;
+    background-color: var(--parchment);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .page-header {
+    background-color: var(--forest);
+    border-bottom: 4px double var(--gold);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .page-header-title {
+    font-family: 'Special Elite', cursive;
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .progress-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .progress-label {
+    font-family: 'Courier Prime', monospace;
+    color: var(--parchment-dark);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  .progress-bar-outer {
+    width: 160px;
+    height: 6px;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.4);
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.4s ease;
+  }
+
+  /* ── QUESTION SECTION ── */
+  .question-wrapper {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+  }
+
+  .section-eyebrow {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    border-left: 3px solid var(--rust);
+    padding-left: 0.75rem;
+  }
+
+  .question-card {
+    background: var(--pale);
+    border: 1px solid var(--parchment-dark);
+    border-top: 4px solid var(--forest);
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+    box-shadow: 3px 3px 0 var(--parchment-dark);
+    display: none;
+  }
+
+  .question-card.active { display: block; }
+
+  .q-number {
+    font-family: 'IM Fell English', serif;
+    font-size: 4rem;
+    color: var(--parchment-dark);
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    line-height: 1;
+    opacity: 0.5;
+    user-select: none;
+  }
+
+  .q-domain {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--faded);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .q-text {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.35rem;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 2.2rem;
+    max-width: 540px;
+  }
+
+  .scale-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+  }
+
+  .scale-label {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--faded);
+    text-transform: uppercase;
+  }
+
+  .scale-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.4rem;
+  }
+
+  .scale-btn {
+    flex: 1;
+    padding: 0.9rem 0.3rem;
+    border: 1px solid var(--parchment-dark);
+    background: var(--parchment);
+    cursor: pointer;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    color: var(--faded);
+    transition: all 0.15s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .scale-btn:hover {
+    background: var(--forest);
+    color: var(--parchment);
+    border-color: var(--forest);
+  }
+
+  .scale-btn.selected {
+    background: var(--forest);
+    color: var(--gold);
+    border-color: var(--forest);
+    font-weight: 700;
+  }
+
+  .scale-btn .btn-val {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .scale-btn .btn-desc {
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+
+  .nav-btn {
+    background: none;
+    border: 2px solid var(--forest);
+    color: var(--forest);
+    font-family: 'Special Elite', cursive;
+    letter-spacing: 0.2em;
+    font-size: 0.7rem;
+    padding: 0.7rem 2rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: var(--forest);
+    color: var(--parchment);
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .nav-btn.primary {
+    background: var(--forest);
+    color: var(--gold);
+    border-color: var(--forest);
+  }
+
+  .nav-btn.primary:hover {
+    background: var(--forest-mid);
+  }
+
+  .q-hint {
+    font-family: 'Courier Prime', monospace;
+    font-style: italic;
+    font-size: 0.75rem;
+    color: var(--faded);
+    margin-top: 1.5rem;
+    border-top: 1px dashed var(--parchment-dark);
+    padding-top: 1rem;
+    line-height: 1.5;
+  }
+
+  /* ── INTRO PAGE ── */
+  .intro-section {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  .intro-title {
+    font-family: 'IM Fell English', serif;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    color: var(--forest);
+    border-bottom: 2px solid var(--forest);
+    padding-bottom: 0.8rem;
+  }
+
+  .intro-body {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.9rem;
+    line-height: 1.85;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+  }
+
+  .intro-body strong {
+    font-weight: 700;
+    color: var(--forest);
+  }
+
+  .intro-note {
+    background: var(--forest);
+    color: var(--parchment);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    border-left: 5px solid var(--gold);
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+
+  .framework-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .framework-box {
+    border: 1px solid var(--forest);
+    padding: 1.2rem;
+    background: var(--pale);
+  }
+
+  .framework-box h4 {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.6rem;
+  }
+
+  .framework-box p {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.72rem;
+    color: var(--faded);
+    line-height: 1.6;
+  }
+
+  .start-btn {
+    background: var(--forest);
+    color: var(--gold);
+    border: none;
+    font-family: 'Special Elite', cursive;
+    letter-spacing: 0.3em;
+    font-size: 0.8rem;
+    padding: 1.2rem 4rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    display: block;
+    margin-top: 2.5rem;
+    border: 2px solid var(--forest);
+  }
+
+  .start-btn:hover { background: var(--forest-mid); }
+
+  /* ── RESULTS ── */
+  #results-section {
+    display: none;
+    background-color: var(--parchment);
+    min-height: 100vh;
+  }
+
+  .results-header {
+    background: var(--forest);
+    border-bottom: 4px double var(--gold);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .results-eyebrow {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .results-type-badge {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    color: var(--parchment);
+    line-height: 1;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+
+  .results-type-name {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+  }
+
+  .results-body {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  .results-intro-text {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 3rem;
+    border-left: 4px solid var(--rust);
+    padding-left: 1.5rem;
+    font-style: italic;
+  }
+
+  .results-section-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    margin-top: 3rem;
+    border-bottom: 1px solid var(--parchment-dark);
+    padding-bottom: 0.5rem;
+  }
+
+  /* Spectrum bars */
+  .spectrum-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .spectrum-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 110px;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .spec-label-l { text-align: right; }
+  .spec-label-r { text-align: left; }
+
+  .spec-label-l, .spec-label-r {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faded);
+    line-height: 1.3;
+  }
+
+  .spec-bar-outer {
+    height: 20px;
+    background: var(--parchment-dark);
+    position: relative;
+    border: 1px solid var(--parchment-dark);
+    overflow: hidden;
+  }
+
+  .spec-bar-fill {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: var(--forest);
+    transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+    transition-delay: 0.1s;
+  }
+
+  .spec-bar-marker {
+    position: absolute;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--gold);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    opacity: 0.5;
+  }
+
+  .spec-pct {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    color: var(--parchment);
+    z-index: 3;
+  }
+
+  /* Big5 facet bars */
+  .big5-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .big5-card {
+    border: 1px solid var(--parchment-dark);
+    background: var(--pale);
+    padding: 1.2rem 1.5rem;
+    box-shadow: 2px 2px 0 var(--parchment-dark);
+  }
+
+  .big5-trait-name {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.1rem;
+    color: var(--forest);
+    margin-bottom: 0.3rem;
+  }
+
+  .big5-score-label {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--faded);
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+
+  .big5-bar-outer {
+    height: 10px;
+    background: var(--parchment-dark);
+    margin-bottom: 0.8rem;
+    border: 1px solid var(--parchment-dark);
+    overflow: hidden;
+  }
+
+  .big5-bar-fill {
+    height: 100%;
+    background: var(--rust);
+    transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+    transition-delay: 0.3s;
+  }
+
+  .big5-desc {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--faded);
+  }
+
+  /* Enneagram */
+  .enneagram-display {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 1rem;
+  }
+
+  .enn-number {
+    font-family: 'IM Fell English', serif;
+    font-size: 5rem;
+    color: var(--forest);
+    line-height: 1;
+    text-shadow: 3px 3px 0 var(--parchment-dark);
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .enn-info h3 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.5rem;
+    color: var(--forest);
+    margin-bottom: 0.3rem;
+  }
+
+  .enn-wing {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    color: var(--rust);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .enn-desc {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+
+  /* Cognitive functions */
+  .cog-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .cog-fn {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.9rem 1.2rem;
+    background: var(--pale);
+    border: 1px solid var(--parchment-dark);
+    border-left: 5px solid var(--forest);
+  }
+
+  .cog-fn:nth-child(2) { border-left-color: var(--forest-mid); opacity: 0.92; }
+  .cog-fn:nth-child(3) { border-left-color: var(--faded); opacity: 0.82; }
+  .cog-fn:nth-child(4) { border-left-color: var(--parchment-dark); opacity: 0.7; }
+
+  .cog-code {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--forest);
+    text-align: center;
+  }
+
+  .cog-detail h5 {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.2rem;
+  }
+
+  .cog-detail p {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    color: var(--faded);
+    line-height: 1.5;
+  }
+
+  /* Jung quote */
+  .jung-quote {
+    background: var(--forest);
+    padding: 2.5rem;
+    margin: 3rem 0;
+    position: relative;
+    color: var(--parchment);
+  }
+
+  .jung-quote::before {
+    content: '\201C';
+    font-family: 'IM Fell English', serif;
+    font-size: 7rem;
+    color: rgba(201,168,76,0.2);
+    position: absolute;
+    top: -1rem;
+    left: 1.5rem;
+    line-height: 1;
+  }
+
+  .jung-quote p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+  }
+
+  .jung-quote cite {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-style: normal;
+  }
+
+  /* Type description */
+  .type-desc-box {
+    background: var(--pale);
+    border: 1px solid var(--parchment-dark);
+    border-top: 4px solid var(--rust);
+    padding: 2rem;
+    box-shadow: 3px 3px 0 var(--parchment-dark);
+    margin-top: 1rem;
+  }
+
+  .type-desc-box h3 {
+    font-family: 'IM Fell English', serif;
+    font-size: 1.4rem;
+    color: var(--forest);
+    margin-bottom: 1rem;
+  }
+
+  .type-desc-box p {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+  }
+
+  .strength-weakness {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .sw-block h4 {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid;
+  }
+
+  .sw-block.strengths h4 { color: var(--forest); border-color: var(--forest); }
+  .sw-block.weaknesses h4 { color: var(--rust); border-color: var(--rust); }
+
+  .sw-block ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sw-block ul li {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--faded);
+    padding-left: 1.2rem;
+    position: relative;
+    margin-bottom: 0.3rem;
+  }
+
+  .sw-block ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--parchment-dark);
+  }
+
+  .retake-btn {
+    background: none;
+    border: 2px solid var(--rust);
+    color: var(--rust);
+    font-family: 'Special Elite', cursive;
+    letter-spacing: 0.25em;
+    font-size: 0.7rem;
+    padding: 0.9rem 2.5rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.15s, color 0.15s;
+    margin-top: 3rem;
+  }
+
+  .retake-btn:hover {
+    background: var(--rust);
+    color: var(--parchment);
+  }
+
+  .footer-stamp {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--parchment-dark);
+  }
+
+  .footer-stamp p {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--faded);
+    text-transform: uppercase;
+    line-height: 2;
+  }
+
+  @media (max-width: 600px) {
+    .big5-grid { grid-template-columns: 1fr; }
+    .framework-grid { grid-template-columns: 1fr; }
+    .strength-weakness { grid-template-columns: 1fr; }
+    .spectrum-row { grid-template-columns: 70px 1fr 70px; }
+    .enneagram-display { grid-template-columns: 1fr; }
+    .scale-btn .btn-desc { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════ COVER ══════════════════════════ -->
+<div id="cover">
+  <div class="cover-stamp">Volume XII — Revised Edition</div>
+  <div class="cover-institute">The Analytical Psychology Institute</div>
+
+  <svg class="inkblot-svg" viewBox="0 0 200 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="100" cy="65" rx="18" ry="28" fill="#c9a84c" opacity="0.6"/>
+    <ellipse cx="75" cy="55" rx="28" ry="18" fill="#c9a84c" opacity="0.5" transform="rotate(-20 75 55)"/>
+    <ellipse cx="125" cy="55" rx="28" ry="18" fill="#c9a84c" opacity="0.5" transform="rotate(20 125 55)"/>
+    <ellipse cx="55" cy="45" rx="22" ry="12" fill="#c9a84c" opacity="0.4" transform="rotate(-40 55 45)"/>
+    <ellipse cx="145" cy="45" rx="22" ry="12" fill="#c9a84c" opacity="0.4" transform="rotate(40 145 45)"/>
+    <ellipse cx="40" cy="70" rx="18" ry="10" fill="#c9a84c" opacity="0.3" transform="rotate(-60 40 70)"/>
+    <ellipse cx="160" cy="70" rx="18" ry="10" fill="#c9a84c" opacity="0.3" transform="rotate(60 160 70)"/>
+    <ellipse cx="100" cy="90" rx="14" ry="20" fill="#c9a84c" opacity="0.4"/>
+    <ellipse cx="85" cy="100" rx="10" ry="14" fill="#c9a84c" opacity="0.3" transform="rotate(15 85 100)"/>
+    <ellipse cx="115" cy="100" rx="10" ry="14" fill="#c9a84c" opacity="0.3" transform="rotate(-15 115 100)"/>
+  </svg>
+
+  <h1 class="cover-title">The Psyche Index</h1>
+  <p class="cover-subtitle">A Comprehensive Typological Assessment</p>
+  <div class="cover-divider"></div>
+
+  <div class="cover-meta">
+    Synthesising the Jungian cognitive function model,<br>
+    the Big Five factor taxonomy (Costa & McCrae, 1992),<br>
+    and Enneagram triadic theory (Naranjo, Riso & Hudson)
+    <br><br>
+    <em>60 items · Adaptive scoring · Academic methodology</em>
+  </div>
+
+  <div style="position: absolute; top: 1.2rem; right: 1.2rem; z-index: 10; display: flex; gap: 0.6rem; align-items: center;">
+    <button id="lang-toggle" onclick="toggleLanguage()" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:0.6rem 1rem; cursor:pointer; font-family: 'Special Elite', cursive; letter-spacing:0.08em; text-transform:uppercase; font-size:0.65rem;">العربية</button>
+  </div>
+
+  <button id="begin-btn" onclick="showIntro()">Begin Assessment →</button>
+</div>
+
+<!-- ══════════════════════════ APP ══════════════════════════ -->
+<div id="app">
+
+  <div class="page-header">
+    <div class="page-header-title">The Psyche Index</div>
+    <div class="progress-container">
+      <div class="progress-label" id="progress-text">Item 1 of 60</div>
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div id="intro-page">
+    <div class="intro-section">
+      <h2 class="intro-title">Instructions & Theoretical Basis</h2>
+
+      <p class="intro-body">
+        This instrument integrates three validated frameworks to produce a nuanced picture of your personality architecture. Unlike popular personality quizzes, the questions here draw on <strong>empirical research in differential psychology</strong>, Jung's theory of psychological types, and the Big Five factor model — the most scientifically replicated personality taxonomy in the literature.
+      </p>
+
+      <div class="intro-note">
+        "The shoe that fits one person pinches another; there is no recipe for living that suits all cases." — C. G. Jung, <em>Modern Man in Search of a Soul</em> (1933)
+      </div>
+
+      <p class="intro-body">
+        Rate each statement on a 7-point scale reflecting how accurately it describes your habitual patterns of thinking, feeling, and behaviour. There are no correct answers. Respond based on who you are, not who you aspire to be. <strong>First impressions tend to be more accurate than deliberated responses.</strong>
+      </p>
+
+      <div class="framework-grid">
+        <div class="framework-box">
+          <h4>MBTI / Jung</h4>
+          <p>Measures cognitive function preferences: Extraversion/Introversion, Sensing/iNtuition, Thinking/Feeling, Judging/Perceiving. Derived from Jung's <em>Psychological Types</em> (1921).</p>
+        </div>
+        <div class="framework-box">
+          <h4>Big Five (NEO)</h4>
+          <p>Assesses Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism — the five orthogonal trait dimensions empirically established across cultures (Costa & McCrae, 1992).</p>
+        </div>
+        <div class="framework-box">
+          <h4>Enneagram</h4>
+          <p>Maps core motivational drivers across nine character structures rooted in three instinctual centres: Gut (8–9–1), Heart (2–3–4), Head (5–6–7). Based on Riso & Hudson's Trifix model.</p>
+        </div>
+      </div>
+
+      <p class="intro-body">
+        The assessment contains <strong>60 items</strong> and takes approximately 12–18 minutes to complete with genuine reflection. Your data is processed entirely within your browser — nothing is transmitted externally.
+      </p>
+
+      <button class="start-btn" onclick="startTest()">Commence Assessment →</button>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div id="question-page" style="display:none">
+    <div class="question-wrapper">
+      <div class="section-eyebrow" id="section-eyebrow">Section I — Cognitive Orientation</div>
+      <div id="question-cards-container"></div>
+      <div class="nav-row">
+        <button class="nav-btn" id="prev-btn" onclick="prevQuestion()" disabled>← Previous</button>
+        <button class="nav-btn primary" id="next-btn" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════ RESULTS ══════════════════════════ -->
+<div id="results-section">
+  <div class="results-header">
+    <div class="results-eyebrow">Assessment Complete — Your Typological Profile</div>
+    <div class="results-type-badge" id="res-type-code">INTJ</div>
+    <div class="results-type-name" id="res-type-name">The Architect</div>
+  </div>
+
+  <div class="results-body">
+
+    <p class="results-intro-text" id="res-intro-text"></p>
+
+    <!-- MBTI Spectra -->
+    <div class="results-section-title">Jungian Dimension Analysis</div>
+    <div class="spectrum-grid" id="mbti-spectra"></div>
+
+    <!-- Jung Quote -->
+    <div class="jung-quote" id="res-jung-quote">
+      <p></p>
+      <cite></cite>
+    </div>
+
+    <!-- Type Description -->
+    <div class="results-section-title">Psychological Profile</div>
+    <div class="type-desc-box" id="res-type-desc"></div>
+
+    <!-- Big 5 -->
+    <div class="results-section-title">Big Five Factor Profile (NEO Model)</div>
+    <div class="big5-grid" id="big5-cards"></div>
+
+    <!-- Enneagram -->
+    <div class="results-section-title">Enneagram Core Type</div>
+    <div class="enneagram-display" id="enn-display">
+      <div class="enn-number" id="enn-number">5</div>
+      <div class="enn-info" id="enn-info"></div>
+    </div>
+
+    <!-- Cognitive Stack -->
+    <div class="results-section-title">Jungian Cognitive Function Stack</div>
+    <div class="cog-stack" id="cog-stack"></div>
+
+    <div class="footer-stamp">
+      <p>The Psyche Index · Analytical Psychology Institute<br>
+      Scored against normative data · Not for clinical use<br>
+      Based on Jung (1921), Costa & McCrae (1992), Riso & Hudson (1996)</p>
+    </div>
+
+    <div class="footer-stamp">
+      <p>
+        By <strong>Osama AlHabsi</strong> (OJ) · The Psyche Index<br>
+        Not for clinical use · Educational reflection only
+      </p>
+      <p>
+        <a href="privacy-policy.html" style="color:inherit; text-decoration:underline;">Privacy Policy</a>
+        ·
+        <a href="terms-of-use.html" style="color:inherit; text-decoration:underline;">Terms of Use</a>
+      </p>
+    </div>
+
+    <button class="retake-btn" onclick="resetTest()">← Retake Assessment</button>
+
+  </div>
+</div>
+
+
+<script>
+// ══════════════════════════════════════════════════════════
+// QUESTION BANK
+// Each question: { text, dimension, direction, hint?, section }
+// dimension: EI, SN, TF, JP (MBTI)
+//            O, C, E, A, N (Big5)
+//            enn_gut, enn_heart, enn_head (Enneagram)
+// direction: 1 = agree→first pole, -1 = agree→second pole
+// ══════════════════════════════════════════════════════════
+const QUESTIONS = [
+  // ── EI (Extraversion / Introversion) ──
+  { text: "After a prolonged period of social engagement, you typically require time in solitude to restore your cognitive resources.", dim:"EI", dir:1, section:"I", hint:"Consider your genuine restoration patterns, not social obligations." },
+  { text: "You find that your thinking sharpens when you articulate ideas aloud to others, rather than deliberating privately.", dim:"EI", dir:-1, section:"I", hint:"Think about where your best ideas actually emerge." },
+  { text: "You prefer to process a situation thoroughly before responding, even when a rapid reply is socially expected.", dim:"EI", dir:1, section:"I" },
+  { text: "You actively seek out social environments to maintain your sense of vitality and engagement with the world.", dim:"EI", dir:-1, section:"I" },
+  { text: "You are comfortable spending extended periods alone with your own thoughts without experiencing loneliness or restlessness.", dim:"EI", dir:1, section:"I" },
+
+  // ── SN (Sensing / iNtuition) ──
+  { text: "You are more drawn to ideas that have a well-established precedent than to purely theoretical possibilities.", dim:"SN", dir:1, section:"I" },
+  { text: "You frequently perceive underlying patterns and symbolic meanings in events before you can articulate them explicitly.", dim:"SN", dir:-1, section:"I", hint:"Jung called this 'intuitive apprehension of meaning'." },
+  { text: "You prefer to ground your understanding in concrete, tangible facts rather than speculative frameworks.", dim:"SN", dir:1, section:"I" },
+  { text: "Abstract conceptual maps are more useful to you than step-by-step procedural instructions.", dim:"SN", dir:-1, section:"I" },
+  { text: "You notice the physical details of your environment — textures, sounds, spatial arrangements — with unusual precision.", dim:"SN", dir:1, section:"I" },
+  { text: "You find yourself more engaged by the potential of what something could become than by what it presently is.", dim:"SN", dir:-1, section:"II" },
+
+  // ── TF (Thinking / Feeling) ──
+  { text: "When assessing a course of action, logical consistency and structural coherence take precedence over emotional impact on those involved.", dim:"TF", dir:1, section:"II" },
+  { text: "You are acutely attuned to the emotional undercurrents in a room and adjust your communication accordingly.", dim:"TF", dir:-1, section:"II" },
+  { text: "You find that impersonal criteria — data, precedent, causal reasoning — are more reliable guides to decision-making than subjective impressions.", dim:"TF", dir:1, section:"II" },
+  { text: "Maintaining interpersonal harmony is, for you, a genuine value rather than merely a social obligation.", dim:"TF", dir:-1, section:"II" },
+  { text: "Critique and debate, even when sharp, strike you as intellectually productive rather than personally threatening.", dim:"TF", dir:1, section:"II" },
+
+  // ── JP (Judging / Perceiving) ──
+  { text: "You experience genuine discomfort when plans remain open-ended and prefer to reach closure as early as is reasonable.", dim:"JP", dir:1, section:"II" },
+  { text: "You tend to delay final decisions deliberately, preferring to accumulate additional information until the last responsible moment.", dim:"JP", dir:-1, section:"II" },
+  { text: "Structured schedules and organised environments allow you to function at a higher cognitive level.", dim:"JP", dir:1, section:"II" },
+  { text: "You find that unexpected changes in plans often open up more interesting possibilities than the original course of action.", dim:"JP", dir:-1, section:"II" },
+  { text: "Completing tasks ahead of deadline provides you with a tangible sense of psychological relief.", dim:"JP", dir:1, section:"II" },
+
+  // ── Big Five: OPENNESS ──
+  { text: "You regularly seek out aesthetic experiences — literature, music, visual art — not merely for pleasure but because they seem to deepen your understanding of existence.", dim:"O", dir:1, section:"III", hint:"Openness to Experience correlates with intellectual and aesthetic engagement (McCrae & Costa, 1987)." },
+  { text: "You are genuinely comfortable entertaining ideas that contradict your existing worldview.", dim:"O", dir:1, section:"III" },
+  { text: "Philosophical speculation about consciousness, time, or the nature of reality holds your interest for extended periods.", dim:"O", dir:1, section:"III" },
+  { text: "You are suspicious of purely theoretical frameworks that have no clear practical application.", dim:"O", dir:-1, section:"III" },
+  { text: "You find conventional social customs and established procedures generally sufficient and see little need to question them.", dim:"O", dir:-1, section:"III" },
+
+  // ── Big Five: CONSCIENTIOUSNESS ──
+  { text: "You maintain detailed organisational systems because the cognitive overhead of disorder genuinely impairs your functioning.", dim:"C", dir:1, section:"III" },
+  { text: "You tend to abandon ongoing projects when a more stimulating alternative presents itself.", dim:"C", dir:-1, section:"III" },
+  { text: "You hold yourself to standards that others would consider unnecessarily exacting.", dim:"C", dir:1, section:"III" },
+  { text: "Immediate impulses frequently override your longer-term intentions.", dim:"C", dir:-1, section:"III" },
+  { text: "You approach long-term goals through systematic planning rather than opportunistic action.", dim:"C", dir:1, section:"III" },
+
+  // ── Big Five: EXTRAVERSION ──
+  { text: "You generate energy in social contexts — meetings, gatherings, collaborative environments — rather than depleting it.", dim:"E", dir:1, section:"IV" },
+  { text: "You are frequently described by others as enthusiastic, expressive, and talkative.", dim:"E", dir:1, section:"IV" },
+  { text: "In group settings, you tend to assume a directing or initiating role without deliberate effort.", dim:"E", dir:1, section:"IV" },
+  { text: "You experience sustained periods of low-stimulation activity as uncomfortable and deliberately seek external engagement.", dim:"E", dir:1, section:"IV" },
+
+  // ── Big Five: AGREEABLENESS ──
+  { text: "You find it genuinely more satisfying to advance collective welfare than to pursue personal advantage at others' expense.", dim:"A", dir:1, section:"IV" },
+  { text: "You are sceptical of others' stated intentions and tend to verify claims before extending trust.", dim:"A", dir:-1, section:"IV" },
+  { text: "Compromising your own position to reduce interpersonal friction comes naturally to you.", dim:"A", dir:1, section:"IV" },
+  { text: "You believe that competitive self-interest, when honestly acknowledged, produces better outcomes than cooperative idealism.", dim:"A", dir:-1, section:"IV" },
+  { text: "You are genuinely moved by accounts of others' suffering and feel compelled to act on that compassion.", dim:"A", dir:1, section:"IV" },
+
+  // ── Big Five: NEUROTICISM ──
+  { text: "You experience periods of emotional instability that are disproportionate to the objective severity of the triggering event.", dim:"N", dir:1, section:"V", hint:"High Neuroticism reflects vulnerability to psychological stress, not weakness of character." },
+  { text: "Uncertainty about future outcomes generates significant and prolonged apprehension for you.", dim:"N", dir:1, section:"V" },
+  { text: "You maintain emotional equilibrium without conscious effort across a broad range of adverse circumstances.", dim:"N", dir:-1, section:"V" },
+  { text: "Criticism — even when constructive and well-intentioned — tends to produce a lasting negative emotional residue.", dim:"N", dir:1, section:"V" },
+  { text: "You rarely ruminate on past errors once a situation has been resolved to a reasonable degree.", dim:"N", dir:-1, section:"V" },
+
+  // ── Enneagram: GUT (8, 9, 1) ──
+  { text: "You have a strong instinctual aversion to being controlled, constrained, or dominated by others' agendas.", dim:"enn_gut", dir:1, section:"V", hint:"Maps to Type 8 (The Challenger) and gut-centre drives (Riso & Hudson, 2000)." },
+  { text: "Maintaining internal equanimity and avoiding conflict is a central, often unconscious, priority for you.", dim:"enn_gut", dir:2, section:"V" },
+  { text: "You feel a persistent internal pressure toward correctness, improvement, and adherence to principle.", dim:"enn_gut", dir:3, section:"V" },
+  { text: "When you perceive injustice, you are compelled to confront it directly and forcefully, regardless of social risk.", dim:"enn_gut", dir:1, section:"VI" },
+  { text: "You have a deep desire for inner and outer peace — the ideal state being one of undisturbed harmony.", dim:"enn_gut", dir:2, section:"VI" },
+
+  // ── Enneagram: HEART (2, 3, 4) ──
+  { text: "Your sense of personal worth is fundamentally tied to your capacity to assist, support, and be needed by others.", dim:"enn_heart", dir:1, section:"VI", hint:"Maps to Type 2 (The Helper). Heart-centre types are driven by questions of value and identity." },
+  { text: "You are highly attuned to how you are perceived and direct significant energy toward projecting a successful, effective image.", dim:"enn_heart", dir:2, section:"VI" },
+  { text: "You have a pervasive sense of being fundamentally different from others — both gifted and deficient in ways that set you apart.", dim:"enn_heart", dir:3, section:"VI" },
+  { text: "Receiving appreciation and gratitude from others is deeply meaningful to you and motivates much of your behaviour.", dim:"enn_heart", dir:1, section:"VI" },
+  { text: "A fear of failure or appearing incompetent significantly shapes your choices and self-presentation.", dim:"enn_heart", dir:2, section:"VI" },
+
+  // ── Enneagram: HEAD (5, 6, 7) ──
+  { text: "You systematically withdraw energy from the external world to protect your cognitive and emotional resources.", dim:"enn_head", dir:1, section:"VI", hint:"Maps to Type 5 (The Investigator). Head-centre types process experience primarily through cognition and anxiety." },
+  { text: "You maintain an ongoing internal vigilance for potential threats and seek reliable systems or alliances that provide security.", dim:"enn_head", dir:2, section:"VI" },
+  { text: "You are strongly motivated to pursue positive, pleasurable experiences and tend to reframe difficulties in an optimistic light.", dim:"enn_head", dir:3, section:"VI" },
+  { text: "You prefer to observe and understand a situation thoroughly before committing your resources or participation.", dim:"enn_head", dir:1, section:"VI" },
+  { text: "You experience recurrent anxiety about your own safety, loyalty of others, or the reliability of your situation.", dim:"enn_head", dir:2, section:"VI" },
+];
+
+// ══════════════════════════════════════════════════════════
+// TYPE DATA
+// ══════════════════════════════════════════════════════════
+const TYPES = {
+  // NOTE: Added missing MBTI types to prevent incorrect/fallback results.
+  INTJ: {
+
+    name: "The Architect",
+    intro: "You inhabit an internal world of complex systems and long-horizon strategies. Where others see isolated events, you perceive structural patterns and their inevitable trajectories. Jung's 'introverted intuition' — your dominant function — operates not through deductive reasoning but through an almost perceptual grasp of underlying order that precedes formal analysis.",
+    desc: `<h3>The Architect</h3>
+<p>INTJs operate from a position of introverted intuition (Ni) as their dominant process. This manifests as a persistent background activity of pattern synthesis — a convergent focus on singular, high-conviction insights about how complex systems will develop. Isabel Briggs Myers described Ni-dominant types as those who "seek to grasp the patterns underlying surface realities."</p>
+<p>Your auxiliary function, extraverted thinking (Te), provides the executive framework through which you translate internal vision into external structure. This combination produces the characteristic INTJ profile: a strategist who constructs elaborate internal models and then systematically engineers conditions for their realisation.</p>
+<p>You likely experience a persistent tension between your high internal standards and the imperfections of the external world. This is not pathology but the natural consequence of dominant Ni's inherent perfectionism — the vision always exceeds the implementation.</p>`,
+    strengths: ["Long-range strategic vision","Systemic and structural thinking","Independence of judgment","Precision in execution","Incisive analytical capacity"],
+    weaknesses: ["Difficulty tolerating ambiguity in others","Undervaluing affective considerations","Premature closure on complex problems","Interpersonal distance under stress"],
+    quote: { text: "The most intense conflicts, if overcome, leave behind a sense of security and calm that is not easily disturbed.", author: "C. G. Jung, Psychological Reflections" },
+    cogStack: [
+      { code:"Ni", name:"Dominant: Introverted Intuition", desc:"Convergent pattern synthesis; grasps future implications of complex systems through a perceptual, pre-linguistic process." },
+      { code:"Te", name:"Auxiliary: Extraverted Thinking", desc:"Systematic external organisation; structures environments and plans according to objective, impersonal criteria." },
+      { code:"Fi", name:"Tertiary: Introverted Feeling", desc:"A quiet but deeply held internal value system; becomes more accessible with psychological maturity." },
+      { code:"Se", name:"Inferior: Extraverted Sensing", desc:"Present-moment sensory engagement; often underdeveloped, emerging as impulsive hedonism under stress." },
+    ]
+  },
+  INTP: {
+    name: "The Logician",
+    intro: "Your consciousness is oriented toward the internal elaboration of logical architecture — building, testing, and refining conceptual frameworks that account for observed phenomena with maximum parsimony. Jung's 'introverted thinking' type, your mind operates as a private workshop of ideas.",
+    desc: `<h3>The Logician</h3>
+<p>INTPs are governed by introverted thinking (Ti) as their dominant process — a function concerned with achieving an internally consistent, precisely calibrated understanding of how things work. Unlike extraverted thinking, which organises the external world, Ti constructs private taxonomies and causal models, perpetually testing their coherence against new evidence.</p>
+<p>The auxiliary function, extraverted intuition (Ne), provides the generative engine that continuously introduces new possibilities, connections, and conceptual material for the Ti framework to integrate. This produces a characteristic style of rapid theoretical elaboration followed by rigorous internal critique.</p>
+<p>INTPs are among the most intellectually independent of all types, placing a premium on logical integrity over social consensus. This can manifest as an apparently contradictory combination of intellectual humility (the recognition that all frameworks are provisional) and stubborn resistance to conclusions that fail the internal coherence test.</p>`,
+    strengths: ["Precision in theoretical analysis","Exceptional capacity for abstract reasoning","Intellectual independence and originality","Systematic detection of logical inconsistencies","Breadth of conceptual synthesis"],
+    weaknesses: ["Difficulty executing and completing projects","Reluctance to engage with emotional dimensions","Social withdrawal under cognitive pressure","Tendency toward self-doubt and second-guessing"],
+    quote: { text: "The creation of something new is not accomplished by the intellect but by the play instinct acting from inner necessity.", author: "C. G. Jung, Psychological Types (1921)" },
+    cogStack: [
+      { code:"Ti", name:"Dominant: Introverted Thinking", desc:"Internal logical framework construction; creates precise, coherent models of how systems work, independent of external validation." },
+      { code:"Ne", name:"Auxiliary: Extraverted Intuition", desc:"Generative idea exploration; continuously maps possibilities, alternatives, and conceptual connections across domains." },
+      { code:"Si", name:"Tertiary: Introverted Sensing", desc:"Internal archive of sensory experience; provides a reference base of past precedents and subjective impressions." },
+      { code:"Fe", name:"Inferior: Extraverted Feeling", desc:"Social attunement and collective emotional responsiveness; frequently underdeveloped, emerging dramatically under stress." },
+    ]
+  },
+  ENTJ: {
+    name: "The Commander",
+    intro: "You are fundamentally oriented toward marshalling external systems toward long-horizon objectives. Your extraverted thinking gives you an almost instinctive capacity to perceive structural inefficiencies and impose order upon them. Adler's will-to-power finds its clearest personality expression in this type.",
+    desc: `<h3>The Commander</h3>
+<p>ENTJs are led by extraverted thinking (Te) — the cognitive function most directly concerned with imposing logical structure on the external world. This manifests as a natural executive orientation: identifying goals, designing systems, delegating effectively, and driving toward measurable outcomes. Where INTJs construct internal visions, ENTJs engineer external realities.</p>
+<p>Introverted intuition (Ni) serves as the auxiliary, providing the ENTJ with long-range strategic perception that distinguishes them from the more tactically focused ESTJ. The Te-Ni combination is the classic profile of institutional leadership: systemic vision executed through disciplined organisation.</p>
+<p>ENTJs tend to experience the world as a domain of problems awaiting solutions, and other people primarily as resources to be deployed. While this can produce remarkable institutional achievement, psychological integration requires developing access to the inferior introverted feeling (Fi) — the dimension of personal value and individual human significance that remains most inaccessible in early life.</p>`,
+    strengths: ["Executive authority and decisive leadership","Long-term strategic planning","Organisational efficiency","Intellectual self-confidence","High-performance capacity under pressure"],
+    weaknesses: ["Insufficient attention to others' emotional needs","Impatience with perceived incompetence","Tendency toward dominance in collaborative contexts","Difficulty with vulnerability and self-disclosure"],
+    quote: { text: "The privilege of a lifetime is to become who you truly are.", author: "C. G. Jung, The Development of Personality (1954)" },
+    cogStack: [
+      { code:"Te", name:"Dominant: Extraverted Thinking", desc:"Systematic external organisation; structures environments, organisations, and plans according to objective, impersonal criteria." },
+      { code:"Ni", name:"Auxiliary: Introverted Intuition", desc:"Long-range pattern synthesis; perceives structural trajectories and future states of complex systems." },
+      { code:"Se", name:"Tertiary: Extraverted Sensing", desc:"Present-moment sensory engagement and opportunistic action; more developed than in INTJ." },
+      { code:"Fi", name:"Inferior: Introverted Feeling", desc:"Personal value and individual significance; the least accessible function, often experienced as a profound need for meaning in later life." },
+    ]
+  },
+  ENTP: {
+    name: "The Visionary",
+    intro: "Your mind functions as an elaborate possibility-generating apparatus, perpetually mapping the conceptual space adjacent to any given problem and finding unexpected connections between distant domains. Extraverted intuition as a dominant function produces what Jung called the 'intuitive extravert' — a type oriented toward perceiving potential rather than actuality.",
+    desc: `<h3>The Visionary</h3>
+<p>ENTPs are led by extraverted intuition (Ne) — the function oriented toward perceiving possibilities, patterns, and connections that transcend the immediately given. Ne dominant types characteristically experience the world as an inexhaustible source of interesting problems and conceptual territories, each opening onto further territories.</p>
+<p>Introverted thinking (Ti) functions as the analytical partner to Ne's generativity: once possibilities are mapped, Ti provides the rigorous framework for evaluating their internal coherence. This combination produces the characteristic ENTP facility with dialectical argument — the capacity to simultaneously develop and critique multiple positions.</p>
+<p>ENTPs often develop an intellectual identity partly constructed through argumentation itself. This is not mere contrarianism but reflects the genuine process by which Ne generates alternatives and Ti stress-tests them. The developmental challenge lies in integrating the inferior introverted sensing (Si) — the capacity to honour past commitments and sustain projects through their less stimulating phases.</p>`,
+    strengths: ["Generative conceptual innovation","Rapid synthesis across domains","Facility with paradox and dialectic","Intellectual versatility and adaptability","Strategic improvisation"],
+    weaknesses: ["Difficulty with sustained follow-through","Discomfort with routine and procedure","Intellectual argument as social friction","Undervaluing practical constraints"],
+    quote: { text: "The meeting of two personalities is like the contact of two chemical substances: if there is any reaction, both are transformed.", author: "C. G. Jung, Modern Man in Search of a Soul (1933)" },
+    cogStack: [
+      { code:"Ne", name:"Dominant: Extraverted Intuition", desc:"Expansive possibility perception; maps conceptual alternatives, novel connections, and emergent patterns across domains." },
+      { code:"Ti", name:"Auxiliary: Introverted Thinking", desc:"Internal logical coherence testing; evaluates the structural validity of Ne's generated possibilities." },
+      { code:"Fe", name:"Tertiary: Extraverted Feeling", desc:"Social attunement and collective value orientation; provides interpersonal warmth beneath intellectual independence." },
+      { code:"Si", name:"Inferior: Introverted Sensing", desc:"Stable internal experience archive; the least developed function, often manifesting as neglected practical responsibilities." },
+    ]
+  },
+  INFJ: {
+    name: "The Counsellor",
+    intro: "You perceive the psychological interior of situations with unusual depth — a near-empathic grasp of motivations, emotional undercurrents, and symbolic meanings that operates largely pre-consciously. Jung described introverted intuition as a function that 'perceives in archetypes' — grasping the universal within the particular.",
+    desc: `<h3>The Counsellor</h3>
+<p>INFJs share the dominant introverted intuition (Ni) of the INTJ, but their auxiliary function — extraverted feeling (Fe) — orients that perceptual depth toward the human rather than the structural. Where INTJs apply their Ni to systemic analysis, INFJs apply it to psychological understanding, producing an almost uncanny capacity to perceive the inner world of others.</p>
+<p>The Fe auxiliary produces a genuine orientation toward collective harmony and interpersonal attunement. INFJs typically experience others' emotional states with unusual intensity, which can be both a source of remarkable empathic capacity and a significant source of psychic depletion.</p>
+<p>Despite their outward warmth, INFJs maintain a deeply private inner world that most people never access. This is not deception but an accurate perception: the dominant Ni operates in registers that are genuinely difficult to articulate, and Fe's orientation toward others' comfort often makes INFJs reluctant to burden relationships with their own complexity.</p>`,
+    strengths: ["Depth of psychological insight","Visionary long-term thinking","Genuine commitment to human development","Integration of empathy and strategic clarity","Capacity for meaningful individual influence"],
+    weaknesses: ["Susceptibility to psychic exhaustion in social roles","Perfectionism about personal integrity","Difficulty asserting needs and boundaries","Tendency toward emotional absorption"],
+    quote: { text: "Your visions will become clear only when you can look into your own heart. Who looks outside, dreams; who looks inside, awakes.", author: "C. G. Jung, letter to Fanny Bowditch (1916)" },
+    cogStack: [
+      { code:"Ni", name:"Dominant: Introverted Intuition", desc:"Deep pattern perception focused on the human and symbolic; grasps psychological and archetypal meanings behind surface events." },
+      { code:"Fe", name:"Auxiliary: Extraverted Feeling", desc:"Collective emotional attunement; organises social environments toward harmony and responds deeply to others' affective states." },
+      { code:"Ti", name:"Tertiary: Introverted Thinking", desc:"Internal logical analysis; provides intellectual rigour beneath the more visible feeling orientation." },
+      { code:"Se", name:"Inferior: Extraverted Sensing", desc:"Sensory presence and immediate action; often the site of stress-induced perfectionism about physical environment." },
+    ]
+  },
+  INFP: {
+    name: "The Idealist",
+    intro: "You inhabit a rich inner world structured by deeply held personal values — an internal moral and aesthetic universe that functions as your primary reference point. Jung's introverted feeling type is among the most fundamentally individualistic of all orientations: the external world is always evaluated against an inner standard of significance.",
+    desc: `<h3>The Idealist</h3>
+<p>INFPs are led by introverted feeling (Fi) — the function most concerned with the individual's inner value system, emotional authenticity, and personal moral integrity. Fi operates as a constant, often pre-verbal, evaluative process that registers the degree of alignment between external experience and internal values. This is not sentimentality but a form of ethical perception.</p>
+<p>Extraverted intuition (Ne) as the auxiliary provides the imaginative vehicle through which Fi's values are explored and expressed. INFPs are often remarkable creative synthesisers, capable of discovering novel forms through which to express authentic inner content.</p>
+<p>INFPs are frequently misunderstood as primarily 'feeling' types in the affective sense, but their core process is closer to a form of moral and aesthetic perception. They may appear mild externally while maintaining internal positions of extraordinary tenacity — precisely because those positions are expressions of something felt as foundational to personal identity.</p>`,
+    strengths: ["Depth of personal integrity and authenticity","Creative and metaphorical expressiveness","Capacity for profound empathic understanding","Openness to diverse human experience","Long-term commitment to personal values"],
+    weaknesses: ["Susceptibility to idealisation and disillusionment","Difficulty with practical external structure","Taking criticism as an attack on identity","Avoidance of direct interpersonal confrontation"],
+    quote: { text: "The shoe that fits one person pinches another; there is no recipe for living that suits all cases.", author: "C. G. Jung, Modern Man in Search of a Soul (1933)" },
+    cogStack: [
+      { code:"Fi", name:"Dominant: Introverted Feeling", desc:"Internal value perception; maintains a deeply personal moral and aesthetic framework that evaluates all experience." },
+      { code:"Ne", name:"Auxiliary: Extraverted Intuition", desc:"Imaginative possibility exploration; generates creative expressions and conceptual connections for Fi's content." },
+      { code:"Si", name:"Tertiary: Introverted Sensing", desc:"Personal experiential archive; provides nostalgic depth and connection between past meaning and present experience." },
+      { code:"Te", name:"Inferior: Extraverted Thinking", desc:"External organisation and objective criteria; often underdeveloped, emerging as perfectionism about external systems under stress." },
+    ]
+  },
+  ENFJ: {
+    name: "The Protagonist",
+    intro: "Your primary orientation is toward the actualisation of human potential — not in the abstract, but in the particular individuals whose development you invest in with remarkable personal commitment. Extraverted feeling, your dominant function, gives you a pre-conscious attunement to the psychological states and needs of those around you.",
+    desc: `<h3>The Protagonist</h3>
+<p>ENFJs are led by extraverted feeling (Fe) — the function most directly oriented toward social coordination, collective emotional attunement, and interpersonal harmony. At high development, Fe produces a genuine orientation toward others' flourishing rather than mere approval-seeking; ENFJs at their best are catalysts for others' growth.</p>
+<p>The auxiliary introverted intuition (Ni) gives ENFJs a characteristically strategic quality: they not only perceive others' current states with precision but anticipate the trajectory of their development and position their influence accordingly. This combination — the warmth of Fe with the strategic depth of Ni — produces the natural mentor, educator, and leader of communities.</p>
+<p>The developmental challenge for ENFJs is authenticity: the same Fe orientation that enables profound social responsiveness can become an identity-distorting mechanism, shaping the self primarily in response to perceived expectations. Integration requires developing the introverted thinking (Ti) dimension — the capacity to hold positions independent of social reinforcement.</p>`,
+    strengths: ["Exceptional interpersonal attunement","Facilitation of group cohesion and morale","Authentic long-term mentorship","Charismatic and persuasive communication","Commitment to collective development"],
+    weaknesses: ["Susceptibility to identity formation through others' expectations","Difficulty receiving criticism without distress","Tendency toward over-extension in service to others","Neglect of own needs and limits"],
+    quote: { text: "We cannot change anything unless we accept it. Condemnation does not liberate, it oppresses.", author: "C. G. Jung, Psychology and Religion (1938)" },
+    cogStack: [
+      { code:"Fe", name:"Dominant: Extraverted Feeling", desc:"Collective emotional attunement; perceives and responds to the affective states of others with remarkable precision." },
+      { code:"Ni", name:"Auxiliary: Introverted Intuition", desc:"Strategic long-range perception; anticipates how situations and people will develop over time." },
+      { code:"Se", name:"Tertiary: Extraverted Sensing", desc:"Present-moment sensory engagement; enables physical presence and responsiveness in social environments." },
+      { code:"Ti", name:"Inferior: Introverted Thinking", desc:"Internal logical analysis; the least accessible function, often experienced as self-doubt or critical inner voice." },
+    ]
+  },
+  ENFP: {
+    name: "The Champion",
+    intro: "You experience the world as an inexhaustible source of human possibility — every person encountered is a novel world, every situation a potential catalyst for growth. Extraverted intuition as your dominant function gives you a quality of genuine enthusiasm that others often experience as transformatively energising.",
+    desc: `<h3>The Champion</h3>
+<p>ENFPs lead with extraverted intuition (Ne), but unlike ENTPs, their Ne is primarily oriented toward human rather than conceptual possibility. ENFPs perceive the potential in people with unusual depth and direct their characteristic enthusiasm toward the realisation of that potential. Isabel Briggs Myers described this orientation as seeing 'possibilities in people that others miss.'</p>
+<p>Introverted feeling (Fi) as the auxiliary provides the deep value foundation beneath the ENFP's expressive warmth. This is crucial: ENFPs are not simply socially effusive; their engagement with people is guided by an internal compass of personal significance. They are drawn to authentic connection and repelled by social performance without genuine content.</p>
+<p>ENFPs are among the most relationally gifted of all types, capable of forging deep connections rapidly. The developmental challenge lies in deepening rather than broadening — resisting Ne's perpetual pull toward the next interesting person or idea, and cultivating the sustained presence that their Fi values actually require.</p>`,
+    strengths: ["Genuine relational warmth and enthusiasm","Creative synthesis across human experience","Capacity for rapid authentic connection","Inspiring advocacy for human potential","Adaptability and imaginative problem-solving"],
+    weaknesses: ["Difficulty sustaining long-term commitments","Avoidance of emotionally difficult situations","Over-extension through accumulated obligations","Susceptibility to disillusionment"],
+    quote: { text: "There are as many nights as days, and the one is just as long as the other in the year's course. Even a happy life cannot be without a measure of darkness.", author: "C. G. Jung, The Undiscovered Self (1957)" },
+    cogStack: [
+      { code:"Ne", name:"Dominant: Extraverted Intuition", desc:"Human possibility perception; maps the potential and inner world of others with enthusiasm and depth." },
+      { code:"Fi", name:"Auxiliary: Introverted Feeling", desc:"Personal value foundation; provides authentic depth beneath the outward warmth and ensures genuine rather than performed engagement." },
+      { code:"Te", name:"Tertiary: Extraverted Thinking", desc:"External organisation; provides structure and goal-direction when consciously accessed." },
+      { code:"Si", name:"Inferior: Introverted Sensing", desc:"Stable internal experience; often neglected, emerging as nostalgia or health concerns under significant stress." },
+    ]
+  },
+  ISTJ: {
+    name: "The Inspector",
+    intro: "Your mind functions as a reliable archive of lived experience — a sophisticated repository of verified procedures, demonstrated precedents, and established methods. Introverted sensing as your dominant function gives you an almost photographic retention of concrete detail and an instinctive preference for the demonstrably reliable over the theoretically promising.",
+    desc: `<h3>The Inspector</h3>
+<p>ISTJs are led by introverted sensing (Si) — a function that operates through careful comparison of present experience with an internal archive of past experience. Si dominant types develop an exceptionally detailed and reliable internal database of 'how things work,' making them invaluable custodians of institutional knowledge and procedural integrity.</p>
+<p>Extraverted thinking (Te) as the auxiliary gives ISTJs the executive capacity to implement what their Si has established as reliable. This combination produces a profile of exceptional reliability: the ISTJ's word is their bond, their schedules are maintained, and their work meets the standards they have established through careful precedent.</p>
+<p>ISTJs are among the most commonly misunderstood types: their surface conservatism often reads as rigidity, but what it actually reflects is a rational (from Si's perspective) preference for solutions with demonstrated efficacy over untested alternatives. Their reliability is not merely habitual but principled.</p>`,
+    strengths: ["Exceptional reliability and follow-through","Precise attention to procedural detail","Institutional knowledge and memory","Practical problem-solving capacity","Integrity in commitments and obligations"],
+    weaknesses: ["Difficulty adapting to rapid or unpredicted change","Resistance to approaches lacking established precedent","Under-appreciation of creative and innovative contributions","Discomfort with emotional ambiguity"],
+    quote: { text: "The greatest and most important problems of life are all fundamentally insoluble. They must be so because they express the necessary polarity inherent in every self-regulating system.", author: "C. G. Jung, The Structure and Dynamics of the Psyche" },
+    cogStack: [
+      { code:"Si", name:"Dominant: Introverted Sensing", desc:"Internal experiential archive; compares present inputs against a detailed repository of past experience and established precedent." },
+      { code:"Te", name:"Auxiliary: Extraverted Thinking", desc:"External systematic organisation; implements Si's established methods through efficient, structured external procedures." },
+      { code:"Fi", name:"Tertiary: Introverted Feeling", desc:"Personal value system; provides a quiet but firm internal ethical compass." },
+      { code:"Ne", name:"Inferior: Extraverted Intuition", desc:"Possibility perception; often the site of worst-case scenario thinking under stress, or unexpected late-life creativity." },
+    ]
+  },
+  ISFJ: {
+    name: "The Protector",
+    intro: "You have an exceptional capacity for remembering the personal details, preferences, and histories of those in your care — a form of introverted sensing directed toward the human rather than the procedural. This detailed attunement to individuals, combined with extraverted feeling, makes you one of the most practically loving of all types.",
+    desc: `<h3>The Protector</h3>
+<p>ISFJs share the dominant introverted sensing (Si) of the ISTJ, but their auxiliary extraverted feeling (Fe) orients that careful attention toward people rather than systems. The ISFJ's inner archive is populated not primarily with procedures but with the individual histories, needs, preferences, and vulnerabilities of those they care for.</p>
+<p>This combination produces an extraordinary capacity for practical service: ISFJs often demonstrate a remembering of personal details about others that strikes people as remarkable — but from the ISFJ's perspective, this is simply what Si-Fe naturally produces. Every conversation is filed, every stated preference archived, every expressed need noted.</p>
+<p>ISFJs are among the most genuinely self-effacing of all types, often directing the energies that other types invest in self-promotion entirely toward others' welfare. The developmental challenge is reciprocity: the same orientation that makes ISFJs exceptional carers can lead to systematic neglect of their own needs, producing eventual resentment or exhaustion.</p>`,
+    strengths: ["Exceptional empathic attention to individuals","Practical caregiving and anticipatory service","Consistency and reliability in relationships","Strong sense of duty and institutional loyalty","Attention to sensory and aesthetic detail"],
+    weaknesses: ["Systematic self-neglect in service to others","Difficulty asserting needs and boundaries","Resistance to necessary change","Accumulation of unexpressed grievances"],
+    quote: { text: "The most terrifying thing is to accept oneself completely.", author: "C. G. Jung, Letters, Vol. II" },
+    cogStack: [
+      { code:"Si", name:"Dominant: Introverted Sensing", desc:"Personal detail archive focused on people; remembers individual histories, preferences, and needs with extraordinary precision." },
+      { code:"Fe", name:"Auxiliary: Extraverted Feeling", desc:"Collective attunement; deploys Si's knowledge in practical service to others' wellbeing and group harmony." },
+      { code:"Ti", name:"Tertiary: Introverted Thinking", desc:"Internal logical analysis; provides critical perspective and problem-solving capacity beneath the feeling orientation." },
+      { code:"Ne", name:"Inferior: Extraverted Intuition", desc:"Possibility perception; often manifests as anxiety about future possibilities or unexpected late-life openness." },
+    ]
+  },
+  ESTJ: {
+    name: "The Executive",
+    intro: "You have a direct and reliable executive capacity — a natural tendency to perceive what needs to be organised and to apply proven methods for doing so. Extraverted thinking as your dominant function gives you an almost instinctive capacity to create operational clarity from chaos.",
+    desc: `<h3>The Executive</h3>
+<p>ESTJs lead with extraverted thinking (Te) — the function of objective external organisation, systematic procedure, and measurable accountability. Unlike the ENTJ's Te-Ni combination, which produces strategic innovation, the ESTJ's Te-Si combination produces procedural authority: the reliable application of proven methods within established institutional structures.</p>
+<p>The introverted sensing (Si) auxiliary ensures that the ESTJ's organisation is grounded in concrete experiential reality rather than abstract theory. ESTJs are natural guardians of institutional continuity: they know what has worked, they trust what has been demonstrated, and they implement what has been established.</p>
+<p>ESTJs typically operate with a directness and decisiveness that others experience as either reassuringly clear or uncomfortably confrontational, depending on their own typological orientation. For ESTJs themselves, the decisive application of objective criteria to achieve operational goals is simply the natural way of engaging effectively with the world.</p>`,
+    strengths: ["Decisive, reliable organisational leadership","Efficient implementation of established methods","Clear communication of expectations and standards","Institutional loyalty and procedural integrity","Practical and measurable goal achievement"],
+    weaknesses: ["Insufficient regard for unconventional solutions","Discomfort with ambiguous or emergent situations","Tendency toward authoritarian direction style","Relative difficulty with emotional nuance"],
+    quote: { text: "The pendulum of the mind alternates between sense and nonsense, not between right and wrong.", author: "C. G. Jung, Memories, Dreams, Reflections (1962)" },
+    cogStack: [
+      { code:"Te", name:"Dominant: Extraverted Thinking", desc:"External systematic organisation; creates operational clarity through objective procedures, clear roles, and measurable outcomes." },
+      { code:"Si", name:"Auxiliary: Introverted Sensing", desc:"Experiential archive of proven methods; grounds Te's organisation in what has been demonstrated to work." },
+      { code:"Ne", name:"Tertiary: Extraverted Intuition", desc:"Possibility perception; more accessible than in ISTJ, supporting creativity within established frameworks." },
+      { code:"Fi", name:"Inferior: Introverted Feeling", desc:"Personal value system; often underdeveloped, emerging as unexpected emotional intensity under extreme stress." },
+    ]
+  },
+  ESFJ: {
+    name: "The Consul",
+    intro: "You are fundamentally attuned to the social fabric — the emotional currents, relational dynamics, and communal needs that constitute the living tissue of any human group. Your extraverted feeling function operates as a continuous environmental scan, processing and responding to the affective states of those around you.",
+    desc: `<h3>The Consul</h3>
+<p>ESFJs lead with extraverted feeling (Fe) — the function most directly concerned with social harmony, interpersonal attunement, and collective emotional management. At high development, ESFJs are the natural social architects of communities: perceiving what the group needs, facilitating the conditions for its flourishing, and maintaining the relational infrastructure that allows cooperative life to function.</p>
+<p>Introverted sensing (Si) as the auxiliary ensures that ESFJs' social engagement is grounded in concrete experience and established tradition. They tend to express care through the reliable performance of concrete actions — remembered birthdays, prepared meals, practical assistance — rather than abstract assurance.</p>
+<p>ESFJs can sometimes conflate social harmony with truth, allowing Fe's orientation toward positive relational experience to override the confrontation of uncomfortable realities. Psychological integration requires developing the introverted thinking (Ti) capacity to maintain independent positions even when they generate social friction.</p>`,
+    strengths: ["Exceptional practical social attunement","Reliability in communal caregiving","Strong organisational capacity in social contexts","Warm and inclusive interpersonal style","Maintenance of community and relational traditions"],
+    weaknesses: ["Difficulty with interpersonal conflict and confrontation","Susceptibility to social approval as primary feedback","Neglect of own needs in favour of others'","Discomfort with unconventional or transgressive ideas"],
+    quote: { text: "One does not become enlightened by imagining figures of light, but by making the darkness conscious.", author: "C. G. Jung, Alchemical Studies" },
+    cogStack: [
+      { code:"Fe", name:"Dominant: Extraverted Feeling", desc:"Social harmony orientation; continuously perceives and responds to the affective states and needs of the surrounding community." },
+      { code:"Si", name:"Auxiliary: Introverted Sensing", desc:"Established tradition archive; grounds Fe's social engagement in concrete experience and reliable communal precedent." },
+      { code:"Ne", name:"Tertiary: Extraverted Intuition", desc:"Possibility perception; enables creativity within social contexts and imaginative responsiveness to others." },
+      { code:"Ti", name:"Inferior: Introverted Thinking", desc:"Internal logical analysis; often the site of critical self-evaluation and analytical capacity that emerges under stress." },
+    ]
+  },
+  ISTP: {
+    name: "The Virtuoso",
+    intro: "You possess an exceptional practical intelligence — a direct, hands-on capacity to understand how mechanical and physical systems operate through interaction rather than abstraction. Your introverted thinking function constructs precise internal models of causal mechanisms, which your sensing function then tests against direct environmental engagement.",
+    desc: `<h3>The Virtuoso</h3>
+<p>ISTPs are led by introverted thinking (Ti) — but unlike INTPs, whose Ti operates primarily in abstract conceptual domains, the ISTP's Ti is directed toward concrete mechanical systems. The ISTP's internal models are of how physical things work: engines, tools, bodies, tactical situations — systems where precise causal understanding enables skilled intervention.</p>
+<p>Extraverted sensing (Se) as the auxiliary gives ISTPs an immediate, detailed engagement with the physical environment that their Ti then analyses. This combination produces the characteristic ISTP competence: a composed, efficient capacity to intervene in physical situations with precisely calibrated action.</p>
+<p>ISTPs are among the most genuinely self-sufficient of all types, requiring minimal external validation and maintaining a high tolerance for solitary engagement with practical problems. Their apparent emotional detachment is less a feature of emotional underdevelopment than of a Ti-dominant preference for objective analysis in domains where subjective response is, for them, beside the point.</p>`,
+    strengths: ["Exceptional practical and mechanical intelligence","Composed and efficient crisis response","Precise causal analysis of physical systems","Independence and self-sufficiency","Adaptability in dynamic physical environments"],
+    weaknesses: ["Difficulty with long-term relational commitments","Disregard for procedural conventions without practical rationale","Impulsive engagement with environmental stimulation","Communication of internal emotional states"],
+    quote: { text: "Who has fully realised that history is not contained in thick books but lives in our very blood?", author: "C. G. Jung, Women in Europe (1927)" },
+    cogStack: [
+      { code:"Ti", name:"Dominant: Introverted Thinking", desc:"Precision causal modelling of physical systems; constructs exact internal frameworks of how mechanical systems operate." },
+      { code:"Se", name:"Auxiliary: Extraverted Sensing", desc:"Direct sensory engagement; provides detailed environmental input that Ti then analyses and acts upon." },
+      { code:"Ni", name:"Tertiary: Introverted Intuition", desc:"Pattern synthesis; enables strategic foresight and long-range thinking beneath the tactical surface." },
+      { code:"Fe", name:"Inferior: Extraverted Feeling", desc:"Social attunement; often underdeveloped, occasionally erupting as unexpected emotional intensity." },
+    ]
+  },
+  ISFP: {
+    name: "The Composer",
+    intro: "You inhabit experience with unusual immediacy — a sensory and aesthetic sensitivity that registers the qualitative dimensions of the present moment with uncommon depth. Introverted feeling gives you an internal aesthetic and moral compass of great sensitivity; extraverted sensing directs that sensitivity outward into direct, embodied engagement with the world.",
+    desc: `<h3>The Composer</h3>
+<p>ISFPs lead with introverted feeling (Fi) — the function of deep personal value and aesthetic sensitivity — with extraverted sensing (Se) as the auxiliary. Unlike INFPs, who explore Fi through imaginative abstraction, ISFPs express their inner values through direct embodied engagement with the sensory world. Their art, if they make it, tends to be immediate and concrete; their ethics tend to be enacted rather than theorised.</p>
+<p>ISFPs often have an exceptional aesthetic capacity — a precision of sensory response that allows them to compose with colour, sound, texture, or movement in ways that communicate the inexpressible. This is not a 'soft' capacity but a form of intelligence: Fi-Se produces a highly developed sensitivity to the qualitative dimensions of experience that most analytical frameworks fail to capture.</p>
+<p>ISFPs are among the most difficult types to know deeply, combining genuine warmth with a fundamental reserve. The inner world structured by Fi is experienced as deeply private, and Se's orientation toward present engagement means ISFPs tend to express themselves through action rather than verbal disclosure.</p>`,
+    strengths: ["Exceptional aesthetic and sensory intelligence","Authenticity and personal integrity in action","Presence and responsiveness in the immediate moment","Genuine empathic attunement without intrusion","Creative expression through concrete medium"],
+    weaknesses: ["Difficulty with long-range planning and future orientation","Avoidance of direct conflict and confrontation","Limited verbal articulation of inner experience","Susceptibility to under-valuing own contributions"],
+    quote: { text: "Knowing your own darkness is the best method for dealing with the darknesses of other people.", author: "C. G. Jung, Letters Vol. 1" },
+    cogStack: [
+      { code:"Fi", name:"Dominant: Introverted Feeling", desc:"Aesthetic and moral value perception; maintains a deeply personal and sensitive internal compass of significance." },
+      { code:"Se", name:"Auxiliary: Extraverted Sensing", desc:"Direct sensory engagement; expresses Fi values through immediate, embodied interaction with the physical world." },
+      { code:"Ni", name:"Tertiary: Introverted Intuition", desc:"Pattern synthesis; provides occasional flashes of insight and future-orientation beneath the sensing surface." },
+      { code:"Te", name:"Inferior: Extraverted Thinking", desc:"External organisation; often underdeveloped, emerging as perfectionism about practical outcomes under stress." },
+    ]
+  },
+  ESTP: {
+    name: "The Entrepreneur",
+    intro: "You engage the world with a direct, tactical intelligence that operates through action rather than analysis. Your dominant extraverted sensing gives you an immediate, detailed apprehension of the present situation that others typically achieve only through extended deliberation — and by that time, you have already acted.",
+    desc: `<h3>The Entrepreneur</h3>
+<p>ESTPs lead with extraverted sensing (Se) — the function of immediate, detailed engagement with present environmental reality. Se dominant types apprehend the immediate situation with extraordinary precision and respond to it with correspondingly immediate action. They do not theorise about what might be the case; they engage with what is.</p>
+<p>Introverted thinking (Ti) as the auxiliary gives ESTPs a tactical intelligence that complements Se's immediacy: they are not merely reactive but strategically responsive, identifying the most effective intervention in the present situation through a rapid internal causal analysis. This combination produces the natural pragmatist: reality-based, opportunistic, and effective.</p>
+<p>ESTPs are characteristically magnetic social presences — engaging, direct, and often remarkably perceptive about the unstated social dynamics of any situation. Their inferior introverted intuition (Ni) means they typically operate in the immediate term; the developmental challenge involves cultivating the longer-range perspective that their tactical brilliance can then inhabit.</p>`,
+    strengths: ["Immediate tactical perception and response","Practical problem-solving under pressure","Magnetic and engaging social presence","Perceptive grasp of social dynamics","Adaptability and opportunistic effectiveness"],
+    weaknesses: ["Short-term orientation at the expense of long-range planning","Difficulty with abstract conceptual domains","Impatience with established procedure lacking clear rationale","Insensitivity to others' need for reflection and process"],
+    quote: { text: "The healthy man does not torture others — generally it is the tortured who turn into torturers.", author: "C. G. Jung, Answer to Job (1952)" },
+    cogStack: [
+      { code:"Se", name:"Dominant: Extraverted Sensing", desc:"Immediate environmental engagement; apprehends the present situation with comprehensive detail and responds with corresponding immediacy." },
+      { code:"Ti", name:"Auxiliary: Introverted Thinking", desc:"Tactical causal analysis; provides rapid internal evaluation of the most effective intervention in any given situation." },
+      { code:"Fe", name:"Tertiary: Extraverted Feeling", desc:"Social attunement; enables the ESTP's characteristic social perceptiveness and interpersonal effectiveness." },
+      { code:"Ni", name:"Inferior: Introverted Intuition", desc:"Long-range pattern synthesis; often underdeveloped, manifesting as vague unease about future consequences." },
+    ]
+  },
+  ESFP: {
+    name: "The Performer",
+    intro: "You experience the present moment with an immediacy and generosity that others find genuinely enlivening. Your extraverted sensing is oriented not primarily toward tactical advantage but toward the experiential richness of the present situation — the pleasure, vitality, and interpersonal warmth available here and now.",
+    desc: `<h3>The Performer</h3>
+<p>ESFPs share the dominant extraverted sensing (Se) of the ESTP but with introverted feeling (Fi) as the auxiliary rather than Ti. This shifts the orientation from tactical intelligence to aesthetic and interpersonal responsiveness. ESFPs are attuned not primarily to what is happening but to how it feels, and they engage with the present as a source of experiential richness to be fully inhabited.</p>
+<p>ESFPs at their best are genuinely life-affirming presences: their Se-Fi combination produces a type that perceives aesthetic and relational value in situations that others pass by without noticing, and that engages with those situations with authentic warmth and enthusiasm.</p>
+<p>The developmental challenge for ESFPs involves cultivating access to their inferior introverted intuition (Ni) — the capacity for long-range perspective that can give their abundant present-moment energy a direction that sustains over time. Without Ni development, ESFPs' natural vitality can remain dispersed across pleasurable immediate experiences without cohering into something lasting.</p>`,
+    strengths: ["Infectious enthusiasm and relational warmth","Aesthetic sensitivity and sensory intelligence","Practical responsiveness to others' immediate needs","Natural facilitation of joy and positive experience","Genuine empathic presence"],
+    weaknesses: ["Difficulty with long-range planning and delayed gratification","Avoidance of conflict and emotionally difficult situations","Susceptibility to over-extension in pleasurable experiences","Under-development of abstract analytical capacity"],
+    quote: { text: "The art of life is the most distinguished and rarest of all the arts.", author: "C. G. Jung, The Practice of Psychotherapy" },
+    cogStack: [
+      { code:"Se", name:"Dominant: Extraverted Sensing", desc:"Immediate aesthetic and experiential engagement; inhabits the present moment with full sensory attention and generous responsiveness." },
+      { code:"Fi", name:"Auxiliary: Introverted Feeling", desc:"Personal aesthetic and moral values; ensures that Se's immediate engagement is genuine and aligned with deep personal significance." },
+      { code:"Te", name:"Tertiary: Extraverted Thinking", desc:"External organisation; provides structure and goal-direction when consciously developed." },
+      { code:"Ni", name:"Inferior: Introverted Intuition", desc:"Long-range pattern synthesis; the developmental challenge: cultivating future orientation to sustain present vitality." },
+    ]
+  },
+};
+
+// Enneagram type descriptions
+const ENNEAGRAM = {
+  1: { name:"The Reformer", wing:"Wing variations: 1w9 (Idealist) or 1w2 (Advocate)", desc:"Your core motivation is the drive toward integrity, correctness, and ethical improvement. You maintain an exacting internal critic — what Riso & Hudson call the 'inner critic' — that evaluates all action against an internalised standard of rightness. At your best, you embody principled advocacy and moral clarity. The central growth challenge involves recognising that imperfection is not failure but the condition of all human endeavour." },
+  2: { name:"The Helper", wing:"Wing variations: 2w1 (Servant) or 2w3 (Host)", desc:"Your core motivation is the need to be needed — to experience yourself as indispensable to others. This produces a genuine orientation toward others' welfare that can be remarkably selfless or, when unconscious, a form of relational exchange where care is given in implicit expectation of love. Growth involves developing the capacity to acknowledge your own needs directly rather than through indirect service." },
+  3: { name:"The Achiever", wing:"Wing variations: 3w2 (Charmer) or 3w4 (Professional)", desc:"Your core motivation is the avoidance of failure and the maintenance of a successful, admirable image. You are among the most adaptive of all types — capable of identifying what is valued in any context and aligning your self-presentation accordingly. Growth involves distinguishing between genuine accomplishment and performed success, and developing the capacity to be seen in your authentic incompleteness." },
+  4: { name:"The Individualist", wing:"Wing variations: 4w3 (Aristocrat) or 4w5 (Bohemian)", desc:"Your core motivation involves a sense of fundamental differentness — a felt experience of being both uniquely gifted and profoundly deficient. Fours are the type most directly engaged with questions of identity and authenticity. Growth involves recognising that the self is not a fixed essence to be discovered but a living process to be enacted, and that the present moment contains sufficient depth without requiring perpetual longing." },
+  5: { name:"The Investigator", wing:"Wing variations: 5w4 (Iconoclast) or 5w6 (Problem Solver)", desc:"Your core motivation involves protecting your cognitive and emotional resources against depletion through systematic withdrawal from excessive demands. Fives manage anxiety by accumulating knowledge and minimising dependency. Growth involves recognising that engagement with life — including the risk of depletion — is necessary for the knowledge you seek, and that genuine understanding requires participation rather than observation alone." },
+  6: { name:"The Loyalist", wing:"Wing variations: 6w5 (Defender) or 6w7 (Buddy)", desc:"Your core motivation involves the search for security, reliability, and trustworthy systems or relationships in a world experienced as fundamentally uncertain. Sixes are the most anxiety-aware of all types, with a characteristic ambivalence between dependency and counter-dependency. Growth involves developing trust in one's own capacity to navigate uncertainty, rather than seeking external authority or vigilantly opposing it." },
+  7: { name:"The Enthusiast", wing:"Wing variations: 7w6 (Entertainer) or 7w8 (Realist)", desc:"Your core motivation involves the pursuit of positive experience and the avoidance of pain, limitation, or deprivation. Sevens are the head-centre type that manages anxiety through forward movement — constantly generating options, plans, and future pleasures to remain ahead of the feared emptiness. Growth involves developing the capacity to remain with difficult or unpleasurable experience long enough to discover its depth." },
+  8: { name:"The Challenger", wing:"Wing variations: 8w7 (Maverick) or 8w9 (Bear)", desc:"Your core motivation involves maintaining autonomy and power in a world experienced as potentially hostile or dominating. Eights manage vulnerability through assertive self-projection, often developing remarkable protective instincts toward those they consider their own. Growth involves recognising that genuine strength does not require the suppression of vulnerability, and that surrender — in the sense of genuine trust and openness — is available to the strong." },
+  9: { name:"The Peacemaker", wing:"Wing variations: 9w8 (Referee) or 9w1 (Dreamer)", desc:"Your core motivation involves maintaining inner peace through the avoidance of conflict and the subordination of personal agenda to environmental harmony. Nines are the type most prone to what Riso & Hudson call 'self-forgetting' — the gradual erosion of personal priority in the service of frictionless coexistence. Growth involves recognising that genuine peace is not the absence of tension but the capacity to remain present and self-possessed within it." },
+};
+
+// Big5 descriptors
+const BIG5_DESC = {
+  O: { high:"Your profile indicates high Openness to Experience — a genuine engagement with aesthetic, intellectual, and philosophical dimensions of existence. You likely seek out complexity, tolerate ambiguity productively, and find conventional frameworks insufficient to contain your interests.", low:"Your profile indicates lower Openness to Experience — a preference for the concrete, practical, and empirically demonstrated over the theoretical or speculative. You are likely to excel in domains requiring careful application of established knowledge." },
+  C: { high:"High Conscientiousness indicates a well-developed capacity for self-regulation, goal-directed behaviour, and disciplined follow-through. You likely maintain high personal standards and find disorder cognitively costly.", low:"Lower Conscientiousness suggests a more spontaneous, flexible approach to goals and obligations. You may excel in improvised, rapidly changing contexts where rigid planning would be counterproductive." },
+  E: { high:"High Extraversion indicates that social engagement is genuinely energising for you, and that you naturally orient toward external stimulation, interaction, and collective activity as primary sources of vitality.", low:"Lower Extraversion (introversion) indicates that internal processing and solitary engagement are primary sources of cognitive and emotional restoration. Social contexts may be valuable but are experienced as energy-consuming." },
+  A: { high:"High Agreeableness reflects a genuine orientation toward others' welfare and cooperative functioning. You are likely to prioritise relational harmony and others' needs, sometimes at the cost of asserting your own position.", low:"Lower Agreeableness reflects a more autonomously oriented, competitive, or sceptical stance. You are less likely to prioritise social harmony over accurate assessment or personal advantage." },
+  N: { high:"Higher Neuroticism indicates sensitivity to negative affect — anxiety, irritability, or emotional reactivity — that can function as both a source of empathic depth and a vulnerability to psychological stress.", low:"Lower Neuroticism indicates emotional stability and resilience — a characteristic equanimity across varied circumstances. You are likely to maintain functional capacity under conditions that would destabilise others." },
+};
+
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
+let currentQ = 0;
+let answers = {}; // questionIndex -> value (1-7)
+
+function showIntro() {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+function startTest() {
+  document.getElementById('intro-page').style.display = 'none';
+  document.getElementById('question-page').style.display = 'block';
+  buildQuestions();
+  showQuestion(0);
+}
+
+function buildQuestions() {
+  const container = document.getElementById('question-cards-container');
+  container.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `qcard-${i}`;
+    card.innerHTML = `
+      <div class="q-number">${String(i+1).padStart(2,'0')}</div>
+      <div class="q-domain">${getDomainLabel(q.dim)}</div>
+      <p class="q-text">${q.text}</p>
+      <div class="scale-container">
+        <div class="scale-labels">
+          <span class="scale-label">Strongly Disagree</span>
+          <span class="scale-label">Neutral</span>
+          <span class="scale-label">Strongly Agree</span>
+        </div>
+        <div class="scale-options" id="scale-${i}">
+          ${[1,2,3,4,5,6,7].map(v => `
+            <button class="scale-btn" data-q="${i}" data-v="${v}" onclick="selectAnswer(${i},${v})">
+              <span class="btn-val">${v}</span>
+              <span class="btn-desc">${getBtnLabel(v)}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+      ${q.hint ? `<div class="q-hint"><em>Note:</em> ${q.hint}</div>` : ''}
+    `;
+    container.appendChild(card);
+  });
+}
+
+function getDomainLabel(dim) {
+  const map = {
+    EI:'Extraversion — Introversion',
+    SN:'Sensing — iNtuition',
+    TF:'Thinking — Feeling',
+    JP:'Judging — Perceiving',
+    O:'Big Five: Openness to Experience',
+    C:'Big Five: Conscientiousness',
+    E:'Big Five: Extraversion',
+    A:'Big Five: Agreeableness',
+    N:'Big Five: Neuroticism',
+    enn_gut:'Enneagram: Gut Centre (8·9·1)',
+    enn_heart:'Enneagram: Heart Centre (2·3·4)',
+    enn_head:'Enneagram: Head Centre (5·6·7)',
+  };
+  return map[dim] || dim;
+}
+
+function getBtnLabel(v) {
+  return ['','SD','D','MD','N','MA','A','SA'][v] || '';
+}
+
+function selectAnswer(qIdx, val) {
+  answers[qIdx] = val;
+  // Update button styles
+  const scale = document.getElementById(`scale-${qIdx}`);
+  scale.querySelectorAll('.scale-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.v) === val);
+  });
+  // Auto-advance after short delay
+  setTimeout(() => {
+    if (currentQ < QUESTIONS.length - 1) nextQuestion();
+    else checkCanSubmit();
+  }, 350);
+}
+
+function showQuestion(idx) {
+  document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(`qcard-${idx}`);
+  if (card) card.classList.add('active');
+
+  const q = QUESTIONS[idx];
+  document.getElementById('section-eyebrow').textContent = getSectionLabel(q.section);
+  document.getElementById('progress-text').textContent = `Item ${idx+1} of ${QUESTIONS.length}`;
+  document.getElementById('progress-bar').style.width = `${((idx+1)/QUESTIONS.length)*100}%`;
+  document.getElementById('prev-btn').disabled = idx === 0;
+
+  const isLast = idx === QUESTIONS.length - 1;
+  const nextBtn = document.getElementById('next-btn');
+  if (isLast) {
+    nextBtn.textContent = 'Calculate Results →';
+    nextBtn.onclick = submitTest;
+  } else {
+    nextBtn.textContent = 'Next →';
+    nextBtn.onclick = nextQuestion;
+  }
+}
+
+function getSectionLabel(s) {
+  const map = {
+    'I':'Section I — Cognitive Orientation',
+    'II':'Section II — Information Processing & Decision-Making',
+    'III':'Section III — Big Five: Openness & Conscientiousness',
+    'IV':'Section IV — Big Five: Extraversion & Social Disposition',
+    'V':'Section V — Affect Regulation & Enneagram Gut Centre',
+    'VI':'Section VI — Enneagram Heart & Head Centres',
+  };
+  return map[s] || s;
+}
+
+function nextQuestion() {
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    showQuestion(currentQ);
+    window.scrollTo(0, 80);
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    showQuestion(currentQ);
+    window.scrollTo(0, 80);
+  }
+}
+
+function checkCanSubmit() {
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.textContent = 'Calculate Results →';
+  nextBtn.onclick = submitTest;
+}
+
+// ══════════════════════════════════════════════════════════
+// SCORING
+// ══════════════════════════════════════════════════════════
+function submitTest() {
+  // Fill missing answers with neutral (4)
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    if (answers[i] === undefined) answers[i] = 4;
+  }
+
+  const scores = computeScores();
+  displayResults(scores);
+}
+
+function computeScores() {
+// MBTI + Big5 only. Enneagram is scored separately below.
+  const dims = { EI:[], SN:[], TF:[], JP:[], O:[], C:[], E:[], A:[], N:[] };
+
+  QUESTIONS.forEach((q, i) => {
+    // Skip enneagram items in the generic MBTI/Big5 pass.
+    if (q.dim.startsWith('enn_')) return;
+
+    let val = answers[i]; // 1–7
+    // For MBTI/Big5 we use direction semantics: dir=1 means “toward first pole”, dir=-1 means “toward second pole”.
+    let adjusted = q.dir === 1 ? val : (8 - val);
+    if (dims[q.dim]) dims[q.dim].push(adjusted);
+  });
+
+  function avg(arr) { return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 4; }
+  function pct(arr) { return Math.round(((avg(arr)-1)/6)*100); }
+
+  // MBTI
+  const EI_pct = pct(dims.EI); // high = I
+  const SN_pct = pct(dims.SN); // high = S
+  const TF_pct = pct(dims.TF); // high = T
+  const JP_pct = pct(dims.JP); // high = J
+
+  const E_I = EI_pct >= 50 ? 'I' : 'E';
+  const S_N = SN_pct >= 50 ? 'S' : 'N';
+  const T_F = TF_pct >= 50 ? 'T' : 'F';
+  const J_P = JP_pct >= 50 ? 'J' : 'P';
+
+  const mbtiCode = E_I + S_N + T_F + J_P;
+
+  // Big 5 percentages
+  const O_pct = pct(dims.O);
+  const C_pct = pct(dims.C);
+  const E_pct = pct(dims.E);
+  const A_pct = pct(dims.A);
+  const N_pct = pct(dims.N);
+
+  // Enneagram: gut 1,2,3 map to types 8,9,1; heart 1,2,3 = 2,3,4; head 1,2,3 = 5,6,7
+  // We need scores per sub-type
+  const gut = { 8:[], 9:[], 1:[] };
+  const heart = { 2:[], 3:[], 4:[] };
+  const head = { 5:[], 6:[], 7:[] };
+
+  QUESTIONS.forEach((q, i) => {
+    const v = answers[i];
+    if (q.dim === 'enn_gut') {
+      const vAdj = q.dir > 0 ? v : (8-v);
+      if (q.dir === 1) gut[8].push(vAdj);
+      else if (q.dir === 2) gut[9].push(vAdj);
+      else gut[1].push(vAdj);
+    }
+    if (q.dim === 'enn_heart') {
+      const vAdj = q.dir > 0 ? v : (8-v);
+      if (q.dir === 1) heart[2].push(vAdj);
+      else if (q.dir === 2) heart[3].push(vAdj);
+      else heart[4].push(vAdj);
+    }
+    if (q.dim === 'enn_head') {
+      const vAdj = q.dir > 0 ? v : (8-v);
+      if (q.dir === 1) head[5].push(vAdj);
+      else if (q.dir === 2) head[6].push(vAdj);
+      else head[7].push(vAdj);
+    }
+  });
+
+  const ennScores = {
+    1: avg(gut[1]), 2: avg(heart[2]), 3: avg(heart[3]),
+    4: avg(heart[4]), 5: avg(head[5]), 6: avg(head[6]),
+    7: avg(head[7]), 8: avg(gut[8]), 9: avg(gut[9])
+  };
+
+  // Find dominant enneagram type
+  let ennType = 5;
+  let ennMax = 0;
+  for (const [t, s] of Object.entries(ennScores)) {
+    if (s > ennMax) { ennMax = s; ennType = parseInt(t); }
+  }
+
+  return {
+    mbtiCode, E_I, S_N, T_F, J_P,
+    EI_pct, SN_pct, TF_pct, JP_pct,
+    O_pct, C_pct, E_pct, A_pct, N_pct,
+    ennType, ennScores
+  };
+}
+
+// ══════════════════════════════════════════════════════════
+// DISPLAY RESULTS
+// ══════════════════════════════════════════════════════════
+function displayResults(s) {
+  document.getElementById('app').style.display = 'none';
+  const rs = document.getElementById('results-section');
+  rs.style.display = 'block';
+
+  const typeData = TYPES[s.mbtiCode] || TYPES['INTJ'];
+
+  document.getElementById('res-type-code').textContent = s.mbtiCode;
+  document.getElementById('res-type-name').textContent = typeData.name;
+  document.getElementById('res-intro-text').textContent = typeData.intro;
+
+  // Jung quote
+  const jq = document.querySelector('.jung-quote');
+  jq.querySelector('p').textContent = '"' + typeData.quote.text + '"';
+  jq.querySelector('cite').textContent = '— ' + typeData.quote.author;
+
+  // Type description
+  document.getElementById('res-type-desc').innerHTML = typeData.desc +
+    `<div class="strength-weakness">
+      <div class="sw-block strengths"><h4>Core Strengths</h4><ul>${typeData.strengths.map(s=>`<li>${s}</li>`).join('')}</ul></div>
+      <div class="sw-block weaknesses"><h4>Developmental Challenges</h4><ul>${typeData.weaknesses.map(w=>`<li>${w}</li>`).join('')}</ul></div>
+    </div>`;
+
+  // MBTI Spectra
+  const spectra = document.getElementById('mbti-spectra');
+  spectra.innerHTML = '';
+  const dims = [
+    { left:'Introversion', right:'Extraversion', pct: 100 - s.EI_pct, letter: s.E_I === 'I' ? 'I dominant' : 'E dominant' },
+    { left:'Sensing', right:'iNtuition', pct: 100 - s.SN_pct, letter: s.S_N === 'S' ? 'S dominant' : 'N dominant' },
+    { left:'Thinking', right:'Feeling', pct: 100 - s.TF_pct, letter: s.T_F === 'T' ? 'T dominant' : 'F dominant' },
+    { left:'Judging', right:'Perceiving', pct: 100 - s.JP_pct, letter: s.J_P === 'J' ? 'J dominant' : 'P dominant' },
+  ];
+
+  dims.forEach(d => {
+    const fillPct = d.pct;
+    spectra.innerHTML += `
+      <div class="spectrum-row">
+        <div class="spec-label-l">${d.left}</div>
+        <div class="spec-bar-outer">
+          <div class="spec-bar-marker"></div>
+          <div class="spec-bar-fill" style="width:0%" data-target="${fillPct}"></div>
+          <span class="spec-pct">${fillPct}%</span>
+        </div>
+        <div class="spec-label-r">${d.right}</div>
+      </div>`;
+  });
+
+  // Big 5 cards
+  const big5 = document.getElementById('big5-cards');
+  const b5data = [
+    { trait:'Openness', dim:'O', pct:s.O_pct },
+    { trait:'Conscientiousness', dim:'C', pct:s.C_pct },
+    { trait:'Extraversion', dim:'E', pct:s.E_pct },
+    { trait:'Agreeableness', dim:'A', pct:s.A_pct },
+    { trait:'Neuroticism', dim:'N', pct:s.N_pct },
+  ];
+
+  big5.innerHTML = b5data.map(b => {
+    const level = b.pct >= 60 ? 'high' : (b.pct <= 40 ? 'low' : 'moderate');
+    const levelLabel = b.pct >= 60 ? 'High' : (b.pct <= 40 ? 'Low' : 'Moderate');
+    return `<div class="big5-card">
+      <div class="big5-trait-name">${b.trait}</div>
+      <div class="big5-score-label">${levelLabel} — ${b.pct}th percentile</div>
+      <div class="big5-bar-outer"><div class="big5-bar-fill" style="width:0%" data-target="${b.pct}"></div></div>
+      <p class="big5-desc">${BIG5_DESC[b.dim][level === 'moderate' ? 'high' : level]}</p>
+    </div>`;
+  }).join('');
+
+  // Enneagram
+  const ennData = ENNEAGRAM[s.ennType];
+  document.getElementById('enn-number').textContent = s.ennType;
+  document.getElementById('enn-info').innerHTML = `
+    <h3>${ennData.name}</h3>
+    <div class="enn-wing">${ennData.wing}</div>
+    <p class="enn-desc">${ennData.desc}</p>`;
+
+  // Cognitive stack
+  const cog = document.getElementById('cog-stack');
+  cog.innerHTML = typeData.cogStack.map(fn => `
+    <div class="cog-fn">
+      <div class="cog-code">${fn.code}</div>
+      <div class="cog-detail">
+        <h5>${fn.name}</h5>
+        <p>${fn.desc}</p>
+      </div>
+    </div>`).join('');
+
+  window.scrollTo(0, 0);
+
+  // Animate bars after paint
+  setTimeout(() => {
+    document.querySelectorAll('.spec-bar-fill[data-target]').forEach(el => {
+      el.style.width = el.dataset.target + '%';
+    });
+    document.querySelectorAll('.big5-bar-fill[data-target]').forEach(el => {
+      el.style.width = el.dataset.target + '%';
+    });
+  }, 200);
+}
+
+function toggleLanguage() {
+  // Placeholder implementation (will be fully implemented with Arabic translations next step).
+  // Prevents runtime error from clicking the toggle.
+  const html = document.documentElement;
+  const current = html.getAttribute('data-lang') || 'en';
+  const next = current === 'en' ? 'ar' : 'en';
+  html.setAttribute('data-lang', next);
+  html.setAttribute('dir', next === 'ar' ? 'rtl' : 'ltr');
+  html.setAttribute('lang', next === 'ar' ? 'ar' : 'en');
+}
+
+function resetTest() {
+  answers = {};
+  currentQ = 0;
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('question-page').style.display = 'none';
+  document.getElementById('intro-page').style.display = 'block';
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('progress-text').textContent = 'Item 1 of 60';
+}
+</script>
+</body>
+</html>
